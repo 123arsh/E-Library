@@ -171,17 +171,17 @@ const SearchResults = () => {
     <div className="p-10 text-white bg-[#080d13] min-h-screen">
       <h1 className="text-2xl mb-4">Search Results for: <span className="text-blue-400">{query}</span></h1>
       {filteredBooks.length > 0 ? (
-        <div className="grid grid-cols-4 gap-4">
+        <div className="grid grid-cols-4 gap-4 ">
           {filteredBooks.map(book => (
-            <div key={book.id} className="bg-white p-4 text-black rounded-lg">
+            <div key={book.id} className="bg-[#0f172a] p-4 text-white rounded-lg">
               <img src={book.coverImg} alt={book.title} className="w-50 h-64 object-cover rounded-lg" />
-              <h2 className="text-xl mt-2">{book.title}</h2>
-              <p className="text-gray-600">{book.author}</p>
-              <p className="text-sm mt-2">{book.description}</p>
+              <h2 className="text-xl font-bold mt-2">{book.title}</h2>
+              <p className="text-gray-400">{book.author}</p>
+              <p className="text-sm text-gray-400 mt-2">{book.description}</p>
               {book.pdf && (
                 <a
                   href={book.pdf}
-                  className="text-blue-500 mt-4 inline-block"
+                  className="flex justify-center items-center text-blue-500 mt-4 h-[40px] w-[120px] border border-[#94A3B8] rounded-xl hover:bg-blue-600 hover:border-0 hover:text-white"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
