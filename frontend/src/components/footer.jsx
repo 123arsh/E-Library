@@ -1,17 +1,35 @@
-import React from 'react'
+import React from 'react';
+import { FaLinkedin, FaEnvelope } from 'react-icons/fa';
 
 const Footer = () => {
   return (
-    <div className='flex justify-around items-center bg-[#0b0f12] text-white h-[200px] w-full border border-[#94A3B8] rounded-2xl'>
-        <h2>All Right Reserved © </h2>
-        <h2>Contact to :- arshhhhdip@gmail.com</h2>
-        <h2>
-        <a href="https://www.linkedin.com/in/arshdeep07/" target="_blank" rel="noopener noreferrer">
-            linkedin.com/in/arshdeep07
-        </a>
-        </h2>
-    </div>
-  )
-}
+    <footer className="bg-[#0b0f12] border-t border-[#1e293b] text-gray-400 py-6 px-4">
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-center   gap-6 items-center text-sm">
 
-export default Footer
+        {/* Left - Logo (clickable for mail) + Copyright */}
+        <div className="flex items-center gap-4 mb-4 md:mb-0">
+        
+          <span>©All rights reserved</span>
+        </div>
+
+        {/* Right - Icons */}
+        <div className="flex items-center gap-4">
+          <a href="mailto:arshhhhdip@gmail.com" className="hover:text-white transition">
+            <FaEnvelope className="text-blue-400 text-lg" />
+          </a>
+          <a
+            href="https://www.linkedin.com/in/arshdeep07/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-white transition"
+          >
+            <FaLinkedin className="text-blue-500 text-lg" />
+          </a>
+        </div>
+
+      </div>
+    </footer>
+  );
+};
+
+export default Footer;
