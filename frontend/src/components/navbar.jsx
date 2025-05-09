@@ -18,26 +18,35 @@ const Navbar = () => {
   };
 
   return (
-    <div className="fixed flex justify-between border-b-2 border-[#94A3B8] sm:w-full w-[414px] h-[45px] bg-[#0e131b] z-10 px-4">
-      <h1 className="text-white self-center font-poppins text-xl sm:text-lg">E-Library</h1>
+    <div className="w-full bg-[#0e131b] text-white border-b border-gray-600 shadow-md px-4 py-3 flex justify-between items-center z-10">
+      {/* Left: Logo */}
+      <h1 className="text-2xl font-bold font-poppins">eLibrary</h1>
 
+      {/* Right: Login or Dropdown */}
       {userName ? (
-        <div className="relative text-white font-poppins text-sm sm:text-lg">
-          <button onClick={() => setShowDropdown(!showDropdown)} className="flex items-center gap-1">
+        <div className="relative">
+          <button
+            onClick={() => setShowDropdown(!showDropdown)}
+            className="text-sm sm:text-base font-medium hover:underline flex items-center gap-1"
+          >
             Hi, {userName.split(' ')[0]} ▼
           </button>
+
           {showDropdown && (
-            <div className="absolute right-0 mt-2 bg-[#1f2937] border border-[#94A3B8] rounded shadow p-2">
-              <button onClick={handleLogout} className="text-red-400 hover:text-red-600">
+            <div className="absolute right-0 mt-2 bg-[#1f2937] border border-gray-600 rounded shadow-md p-2 z-20">
+              <button
+                onClick={handleLogout}
+                className="text-red-400 hover:text-red-600 text-sm"
+              >
                 Logout
               </button>
             </div>
           )}
         </div>
       ) : (
-        <Link 
-          to="/login" 
-          className="flex items-center text-white font-poppins text-sm sm:text-lg"
+        <Link
+          to="/login"
+          className="flex items-center text-sm sm:text-base font-medium hover:underline"
         >
           Login
           <svg

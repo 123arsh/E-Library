@@ -168,12 +168,12 @@ const Genre = () => {
 
   return (
     <div className='w-full min-h-screen bg-[#0b0f12] text-white'>
-      <div className='flex justify-center items-center h-[100px] w-full gap-10 border border-[#94A3B8] rounded-2xl bg-[#0b0f12]'>
+    <div className='flex flex-wrap justify-center gap-4 sm:gap-6 md:gap-8 lg:gap-10 mb-8 border border-[#94A3B8] rounded-2xl p-4 bg-[#0b0f12]'>
         {['horror', 'spiritual', 'action', 'romantic', 'motivational'].map((genre) => (
           <button
             key={genre}
             onClick={() => handleFilter(genre)}
-            className='h-[45px] bg-[#0b0f12] font-bold w-[150px] rounded-xl font-poppins border border-[#94A3B8] text-[#94A3B8] hover:text-white hover:border-white'
+            className='h-[45px] w-[130px] sm:w-[150px] rounded-xl font-poppins text-sm sm:text-base border border-[#94A3B8] text-[#94A3B8] hover:text-white hover:border-white transition'
           >
             {genre.charAt(0).toUpperCase() + genre.slice(1)}
           </button>

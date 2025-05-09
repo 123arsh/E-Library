@@ -62,7 +62,7 @@ const FeturedSection = () => {
         {booksData.map((data) => (
           <div 
             key={data.id} 
-            className="flex flex-col items-center p-4 rounded-lg shadow-[rgba(0,0,0,0.1)] w-64 bg-[#0F172A]"
+            className="flex flex-col items-center p-4 rounded-lg shadow-[rgba(0,0,0,0.1)] w-52 bg-[#0F172A]"
           >
             <img 
               src={data.coverImg} 

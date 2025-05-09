@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Hero = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -13,23 +13,22 @@ const Hero = () => {
   };
 
   return (
-    <div className="flex items-center flex-col w-full text-black bg-[#080d13]">
-      <div className="mt-[100px] border-1 border-[#94A3B8] h-[150px] w-[600px] rounded-2xl">
-        <form onSubmit={handleSearch}>
-          <h1 className="font-inter text-[36px] text-white">Welcome to the Library</h1>
-          <p className="font-poppins text-[16px] text-[#94A3B8]">Explore thousands of Books Online</p>
-          <div className="flex flex-row justify-between items-center border-1 border-[#94A3B8] h-[45px] text-[#94A3B8] rounded-2xl">
-            <input
-              type="text"
-              className="ml-2 border-none w-full outline-none bg-transparent text-white"
-              placeholder="Search Books..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-            <button type="submit" className="mr-2 text-white">
-              🔍
-            </button>
-          </div>
+    <div className="flex flex-col items-center justify-center min-h-[80vh] bg-[#080d13] px-4 text-white">
+      <div className="w-full max-w-xl border border-[#94A3B8] rounded-2xl p-6 text-center">
+        <h1 className="text-3xl sm:text-4xl font-bold mb-2 font-inter">Welcome to the eLibrary</h1>
+        <p className="text-[#94A3B8] text-base sm:text-lg font-poppins mb-6">Explore thousands of Books Online</p>
+
+        <form onSubmit={handleSearch} className="flex items-center border border-[#94A3B8] rounded-full px-4 py-2">
+          <input
+            type="text"
+            className="flex-grow bg-transparent outline-none text-white placeholder-[#94A3B8] font-poppins"
+            placeholder="Search Books..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <button type="submit" className="text-white text-lg ml-2">
+            🔍
+          </button>
         </form>
       </div>
     </div>
