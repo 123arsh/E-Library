@@ -1,5 +1,5 @@
-import React from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useLocation, Link } from 'react-router-dom';
 
 const booksData = [
     {
@@ -157,10 +157,24 @@ const booksData = [
 ];
 
 const SearchResults = () => {
+  const [user, setUser] = useState();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const query = searchParams.get('query')?.toLowerCase() || '';
 
+  useEffect(()=>{
+      fetch('http://localhost:9000/user')
+      .then((res)=>{ 
+        console.log('Data has been succesfully fetched...');
+        return res.json(res)
+       })
+       .then((data)=>{
+        return setUser(data)
+       })
+       .catch((err)=>{
+        console.log('Problem with fetching data from the Server...', err)
+       })
+    }, [])
   const filteredBooks = booksData.filter(
     book =>
       book.title.toLowerCase().includes(query) ||
@@ -178,8 +192,8 @@ const SearchResults = () => {
               <h2 className="text-xl font-bold mt-2">{book.title}</h2>
               <p className="text-gray-400">{book.author}</p>
               <p className="text-sm text-gray-400 mt-2">{book.description}</p>
-              {book.pdf && (
-                <a
+              {user ?
+                  <a
                   href={book.pdf}
                   className="flex justify-center items-center text-blue-500 mt-4 h-[40px] w-[120px] border border-[#94A3B8] rounded-xl hover:bg-blue-600 hover:border-0 hover:text-white"
                   target="_blank"
@@ -187,7 +201,9 @@ const SearchResults = () => {
                 >
                   Read PDF
                 </a>
-              )}
+                :
+                <Link to='/login' className="flex justify-center items-center text-blue-500 mt-4 h-[40px] w-[120px] border border-[#94A3B8] rounded-xl hover:bg-blue-600 hover:border-0 hover:text-white">Reginster Yourself</Link>
+              }
             </div>
           ))}
         </div>

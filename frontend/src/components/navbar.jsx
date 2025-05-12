@@ -33,10 +33,10 @@ const Navbar = () => {
           </button>
 
           {showDropdown && (
-            <div className="absolute right-0 mt-2 bg-[#1f2937] border border-gray-600 rounded shadow-md p-2 z-20">
+            <div className="absolute right-0 mt-2 bg-[#1f2937] border border-gray-600 rounded shadow-md p-2 z-20 hover:bg-red-800 hover:text-white text-red-400 ">
               <button
                 onClick={handleLogout}
-                className="text-red-400 hover:text-red-600 text-sm"
+                className="text-sm font-inter"
               >
                 Logout
               </button>

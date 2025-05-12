@@ -74,4 +74,22 @@ routes.post('/login', async (req, res) => {
     }
 });
 
+routes.get('/user', async (req, res)=>{
+    try {
+        const user = await User.find();
+        if(user){
+            console.log('user Exist')
+            return res.status(200).json(user)
+        }
+        return res.status(404).send({
+            message: 'User might not exist'
+        })
+    } catch (error) {
+        return res.status(500).send({
+            message: 'Server issue',
+            error
+        })
+    }
+})
+
 module.exports = routes;

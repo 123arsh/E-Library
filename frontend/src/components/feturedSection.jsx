@@ -1,7 +1,22 @@
-import React, { useState } from 'react';
-
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom'
 const FeturedSection = () => {
   const [selectedBook, setSelectedBook] = useState(null);
+  const [user, setUser] = useState()
+
+  useEffect(()=>{
+    fetch('http://localhost:9000/user')
+    .then((res)=>{ 
+      console.log('Data has been succesfully fetched...');
+      return res.json(res)
+     })
+     .then((data)=>{
+      return setUser(data)
+     })
+     .catch((err)=>{
+      console.log('Problem with fetching data from the Server...', err)
+     })
+  }, [])
 
   const booksData = [
     {
@@ -62,7 +77,7 @@ const FeturedSection = () => {
         {booksData.map((data) => (
           <div 
             key={data.id} 
-            className="flex flex-col items-center p-4 rounded-lg shadow-[rgba(0,0,0,0.1)] w-52 bg-[#0F172A]"
+            className="flex flex-col items-center p-4 rounded-lg shadow-[rgba(0,0,0,0.1)] w-[250px] h-[350px] bg-[#0F172A]"
           >
             <img 
               src={data.coverImg} 
@@ -72,13 +87,18 @@ const FeturedSection = () => {
             <h1 className="text-lg font-bold text-center text-[#F1F5F9] font-poppins">{data.title}</h1>
             <h3 className="text-sm text-[#94A3B8] mb-4">{data.author}</h3>
 
-            <button 
+          {user ? 
+              <button 
               className="px-4 py-2 bg-[#193c8e] text-[#94A3B8] hover:text-white w-[100px] mt-2 rounded-[3px] transition duration-300"
               type="button"
               onClick={() => handleViewClick(data)}
             >
               View
             </button>
+            :
+            <Link to='/login' className='
+              className="flex justify-center px-4 py-2 bg-[#193c8e] text-[#94A3B8] hover:text-white w-[100px] mt-2 rounded-[3px] transition duration-300'>Reginster</Link>
+          }
           </div>
         ))}
       </div>

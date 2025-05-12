@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom';
 
 const booksData = [
   {
@@ -157,6 +158,21 @@ const booksData = [
 
 const Genre = () => {
   const [selectedGenre, setSelectedGenre] = useState(null);
+  const [user, setUser] = useState();
+
+  useEffect(()=>{
+    fetch('http://localhost:9000/user')
+    .then((res)=>{ 
+      console.log('Data has been succesfully fetched...');
+      return res.json(res)
+     })
+     .then((data)=>{
+      return setUser(data)
+     })
+     .catch((err)=>{
+      console.log('Problem with fetching data from the Server...', err)
+     })
+  }, []); 
 
   const handleFilter = (genre) => {
     setSelectedGenre(genre);
@@ -187,11 +203,13 @@ const Genre = () => {
             <h2 className='text-xl font-bold mt-2'>{book.title}</h2>
             <p className='text-sm text-gray-400 mb-2'>by {book.author}</p>
             <p className='text-sm text-gray-400'>{book.description.slice(0, 100)}...</p>
-            {book.pdf && (
+            {user ? 
               <a href={book.pdf} target='_blank' rel='noopener noreferrer' className='flex justify-center items-center mt-3 text-blue-400 bg-[#0f172a] border border-[#94A3B8] h-[45px] w-[120px] hover:bg-blue-500 rounded-2xl hover:text-white hover:border-0'>
-                Read PDF
+              Read PDF
               </a>
-            )}
+              :
+              <Link to='/login' className='flex justify-center items-center mt-3 text-blue-400 bg-[#0f172a] border border-[#94A3B8] h-[45px] w-[120px] hover:bg-blue-500 rounded-2xl hover:text-white hover:border-0'>Register</Link>
+            }
           </div>
         ))}
       </div>
