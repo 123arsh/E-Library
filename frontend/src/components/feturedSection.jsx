@@ -1,22 +1,47 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom'
+
+const AlertPopup = ({ closeAlert }) => {
+  return (
+    <div className="fixed inset-0 bg-black/40 backdrop-blur-lg flex justify-center items-center z-50">
+      <div className="bg-white rounded-lg shadow-lg p-6 w-80 relative text-center">
+        <button
+          onClick={closeAlert}
+          className="absolute top-2 right-2 text-red-600 text-xl font-bold hover:text-red-800"
+        >
+          &times;
+        </button>
+        <h2 className="text-2xl font-semibold mb-4 text-red-600">Please Login</h2>
+        <p className="mb-6 text-gray-700">
+          You haven't registered yourself. Please register or login first.
+        </p>
+        <button
+          onClick={() => window.location.href = '/login'}
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+        >
+          Login / Register
+        </button>
+      </div>
+    </div>
+  );
+};
+
 const FeturedSection = () => {
   const [selectedBook, setSelectedBook] = useState(null);
-  const [user, setUser] = useState()
+  const [user, setUser] = useState(null);
+  const [showAlert, setShowAlert] = useState(false);
 
-  useEffect(()=>{
+  useEffect(() => {
     fetch('http://localhost:9000/user')
-    .then((res)=>{ 
-      console.log('Data has been succesfully fetched...');
-      return res.json(res)
-     })
-     .then((data)=>{
-      return setUser(data)
-     })
-     .catch((err)=>{
-      console.log('Problem with fetching data from the Server...', err)
-     })
-  }, [])
+      .then((res) => res.json())
+      .then((data) => {
+        console.log('User data fetched:', data);
+        setUser(data);
+      })
+      .catch((err) => {
+        console.error('Error fetching user data:', err);
+        setUser(null); // treat error as no user
+      });
+  }, []);
 
   const booksData = [
     {
@@ -32,6 +57,7 @@ const FeturedSection = () => {
       title: 'Master Your Emotions',
       author: 'Thibaut Meurisse',
       coverImg: '/booksImg/mye.jpg',
+      value: 'motivational',
       pdf: '/books/Master_Your_Emotions_A_Practical_Guide_to_Overcome.pdf',
       description: 'In Master Your Emotions, Thibaut Meurisse explains how emotions influence our thoughts, actions, and overall quality of life...'
     },
@@ -40,6 +66,7 @@ const FeturedSection = () => {
       title: 'Self Discipline Mindset',
       author: 'Curtis Leone',
       coverImg: '/booksImg/sellf-discipline-mindset.jpg',
+      value: 'motivational',
       pdf: '/books/sdms.pdf',
       description: 'In Self-Discipline Mindset, Curtis Leone explores how mastering discipline is the true foundation for achieving any form of success...'
     },
@@ -48,6 +75,7 @@ const FeturedSection = () => {
       title: 'The Monk Who Sold His Ferrari',
       author: 'Robin Sharma',
       coverImg: '/booksImg/mshf.jpg',
+      value: 'motivational',
       pdf: '/books/The_Monk_Who_Sold_His_Ferrari.pdf',
       description: 'In The Monk Who Sold His Ferrari, Robin Sharma tells the inspiring story of Julian Mantle...'
     },
@@ -56,24 +84,34 @@ const FeturedSection = () => {
       title: 'The Subtle Art of Not Giving a F*ck',
       author: 'Mark Manson',
       coverImg: '/booksImg/saongf.jpg',
+      value: 'motivational',
       pdf: '/books/The_Subtle_Art_of_Not_Giving_Fck.pdf',
       description: 'In The Subtle Art of Not Giving a F*ck, Mark Manson challenges the traditional self-help advice of always striving for positivity...'
-    },
+    }
+    // ... add other books here as you had before
   ];
 
   const handleViewClick = (book) => {
-    setSelectedBook(book);
+    if (user) {
+      setSelectedBook(book);
+    } else {
+      setShowAlert(true);
+    }
   };
 
   const handleCloseModal = () => {
     setSelectedBook(null);
   };
 
+  const closeAlert = () => {
+    setShowAlert(false);
+  };
+
   return (
     <div className="relative flex flex-col justify-center mt-[50px] gap-6 p-6 bg-[#080d13] border border-[#94A3B8] rounded-4xl">
-    <div><h1 className='text-[#F1F5F9] text-4xl font-poppins'>Featured Books</h1></div>
+      <h1 className='text-[#F1F5F9] text-4xl font-poppins'>Featured Books</h1>
 
-      <div className={`flex flex-wrap justify-center items-center gap-10 mt-[10px] transition duration-300 ${selectedBook ? 'blur-sm' : ''}`}>
+      <div className={`flex flex-wrap justify-center items-center gap-10 mt-[10px] transition duration-300 ${selectedBook || showAlert ? 'blur-sm' : ''}`}>
         {booksData.map((data) => (
           <div 
             key={data.id} 
@@ -87,25 +125,20 @@ const FeturedSection = () => {
             <h1 className="text-lg font-bold text-center text-[#F1F5F9] font-poppins">{data.title}</h1>
             <h3 className="text-sm text-[#94A3B8] mb-4">{data.author}</h3>
 
-          {user ? 
-              <button 
+            <button 
               className="px-4 py-2 bg-[#193c8e] text-[#94A3B8] hover:text-white w-[100px] mt-2 rounded-[3px] transition duration-300"
               type="button"
               onClick={() => handleViewClick(data)}
             >
               View
             </button>
-            :
-            <Link to='/login' className='
-              className="flex justify-center px-4 py-2 bg-[#193c8e] text-[#94A3B8] hover:text-white w-[100px] mt-2 rounded-[3px] transition duration-300'>Reginster</Link>
-          }
           </div>
         ))}
       </div>
 
-      {/* Modal Section */}
+      {/* Modal Section for selected book */}
       {selectedBook && (
-        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-transparent bg-opacity-50 backdrop-blur-lg z-50">
+        <div className="fixed inset-0 flex items-center justify-center bg-black/40 backdrop-blur-lg z-50">
           <div className="bg-[#121722] p-8 h-[90%] rounded-lg max-w-lg mx-auto text-center relative">
             <button 
               onClick={handleCloseModal}
@@ -132,6 +165,9 @@ const FeturedSection = () => {
           </div>
         </div>
       )}
+
+      {/* Alert popup if not logged in */}
+      {showAlert && <AlertPopup closeAlert={closeAlert} />}
     </div>
   );
 };

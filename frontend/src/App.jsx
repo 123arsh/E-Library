@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
+import Alert from './components/alert';
 import Navbar from './components/navbar'; 
 import Signup from './components/signup';
 import Login from './components/login';
@@ -12,9 +13,9 @@ import SearchResults from './components/SearchResults'; // ✅ <-- Import this
 
 const MainLayout = () => (
   <>
-    <div className='pb-[100px]'><Navbar /></div>
-    <div className='pb-[100px]'><Hero /></div>
-    <div className='pb-[100px]'><FeturedSection /></div>
+    <div><Navbar /></div>
+    <div><Hero /></div>
+    <div className='pb-[150px]'><FeturedSection /></div>
     <div className='pb-[100px]'><Genre /></div>
     <div className='pt-[100px]'><Footer /></div>
   </>
@@ -35,6 +36,9 @@ const App = () => {
 
             {/* Home route with layout */}
             <Route path="/" element={<MainLayout />} />
+
+            <Route path='/alert' element={ <Alert/> } />
+
           </Routes>
         </div>
       </BrowserRouter>
