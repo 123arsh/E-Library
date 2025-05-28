@@ -13,8 +13,8 @@ const Hero = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[80vh] bg-[#080d13] px-4 text-white">
-      <div className="w-full max-w-xl border border-[#94A3B8] rounded-2xl p-6 text-center">
+    <div className="flex flex-col items-center justify-center min-h-[50vh] bg-[#080d13] px-6 text-white">
+      <div className="w-full max-w-xl border border-[#94A3B8] rounded-2xl text-center p-6">
         <h1 className="text-3xl sm:text-4xl font-bold mb-2 font-inter">Welcome to the eLibrary</h1>
         <p className="text-[#94A3B8] text-base sm:text-lg font-poppins mb-6">Explore thousands of Books Online</p>
 

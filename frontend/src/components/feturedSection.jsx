@@ -107,6 +107,10 @@ const FeturedSection = () => {
     setShowAlert(false);
   };
 
+  const [color, setColor] = useState(false);
+  const ChangeColor = () => {
+    setColor(true)
+  }
   return (
     <div className="relative flex flex-col justify-center mt-[50px] gap-6 p-6 bg-[#080d13] border border-[#94A3B8] rounded-4xl">
       <h1 className='text-[#F1F5F9] text-4xl font-poppins'>Featured Books</h1>
@@ -139,32 +143,48 @@ const FeturedSection = () => {
       {/* Modal Section for selected book */}
       {selectedBook && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/40 backdrop-blur-lg z-50">
-          <div className="bg-[#121722] p-8 h-[90%] rounded-lg max-w-lg mx-auto text-center relative">
+          <div className="bg-[#121722] p-8 h-[90vh] w-[90%] rounded-lg max-w-4xl mx-auto relative border border-white overflow-y-auto">
+            {/* Close Button */}
             <button 
               onClick={handleCloseModal}
               className="absolute top-2 right-2 text-white bg-red-600 hover:bg-red-700 rounded-full w-8 h-8 flex items-center justify-center"
             >
               X
             </button>
-            <h2 className="text-3xl font-bold font-poppins text-[#F1F5F9] mb-2">{selectedBook.title}</h2>
-            <h4 className="text-xl text-[#94A3B8] italic mb-4">by {selectedBook.author}</h4>
-            <img 
-              src={selectedBook.coverImg} 
-              alt={selectedBook.title} 
-              className="w-40 h-60 object-cover mb-4 mx-auto rounded-md"
-            />
-            <p className="text-[#F1F5F9] text-base mb-4">{selectedBook.description}</p>
-            <a 
-              href={selectedBook.pdf} 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="px-4 py-2 bg-[#193c8e] text-white rounded-md inline-block mt-2"
-            >
-              Read PDF
-            </a>
+
+            {/* Content Layout */}
+            <div className="flex gap-6 h-full border border-white">
+              {/* Book Image */}
+              <img 
+                src={selectedBook.coverImg} 
+                alt={selectedBook.title} 
+                className="w-70 h-90 mt-20 object-cover rounded-md"
+              />
+
+              {/* Book Info (left-aligned) */}
+              <div className="flex flex-col justify-start items-start text-left w-full mt-20">
+                <h2 className="text-3xl font-bold font-poppins text-[#F1F5F9] mb-2">{selectedBook.title}</h2>
+                <h4 className="text-xl text-[#94A3B8] italic mb-4">by {selectedBook.author}</h4>
+                <p className="text-[#F1F5F9] text-base mb-4">{selectedBook.description}</p>
+                <div>
+                  <a 
+                  href={selectedBook.pdf} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="px-4 py-2 bg-[#193c8e] text-white rounded-md mt-2"
+                >
+                  Read PDF
+                </a>
+                <div>
+                  <h1 className='text-white mt-3 border border-white rounded-lg w-[50px] h-[25px] flex justify-center items-center' onClick={ChangeColor}>Like</h1>
+                </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       )}
+
 
       {/* Alert popup if not logged in */}
       {showAlert && <AlertPopup closeAlert={closeAlert} />}
