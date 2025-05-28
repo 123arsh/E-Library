@@ -27,8 +27,12 @@ const booksData = new Schema({
         type: String,
         require: true,
         index: true,
+    },
+    likes: {
+        default: null,
+        type: Number
     }
-}, { timestamps: true })
+}, { timestamps: true });
 
 const Book = model('Book', booksData);
 module.exports = Book;
