@@ -1,16 +1,16 @@
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
-const route = express.Router(); // NOT express() here
-const Book = require('../models/books');
+const route = express.Router();
+const Book = require('../models/books'); // Adjust path as needed
 
-// 1️⃣ Multer Storage Setup:
+// ✅ Multer storage config
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     if (file.mimetype.startsWith('image/')) {
-      cb(null, path.resolve('./public/uploads/Images'));
+      cb(null, path.resolve('./public/booksImg'));
     } else if (file.mimetype === 'application/pdf') {
-      cb(null, path.resolve('./public/uploads/PDFs'));
+      cb(null, path.resolve('./public/books')); // 👈 Changed from booksPdf to books
     } else {
       cb(new Error('Only image and PDF files are allowed!'));
     }
@@ -23,28 +23,32 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-
-// 2️⃣ Route to Add Book:
+// ✅ POST route to add book
 route.post('/addbook', upload.fields([
-  { name: 'coverImage', maxCount: 1 },
+  { name: 'coverImg', maxCount: 1 },
   { name: 'bookPdf', maxCount: 1 }
 ]), async (req, res) => {
   try {
-    const { title, author } = req.body;
-    if (!title || !req.files['coverImage'] || !req.files['bookPdf'] || !author) {
+    const { title, author, description, like = 0, dislike = 0, comments = "" } = req.body;
+
+    if (!title || !author || !req.files['coverImg'] || !req.files['bookPdf']) {
       return res.status(400).send({
-        message: 'Title, Cover Image, Book PDF, or Author is missing!'
+        message: 'Title, Author, Cover Image, or Book PDF is missing!'
       });
     }
 
-    const coverImg = `/uploads/Images/${req.files['coverImage'][0].filename}`;
-    const bookPdf = `/uploads/PDFs/${req.files['bookPdf'][0].filename}`;
+    const coverImg = `/booksImg/${req.files['coverImg'][0].filename}`;
+    const bookPdf = `/books/${req.files['bookPdf'][0].filename}`; // 👈 Matches updated folder
 
     const book = await Book.create({
       title,
       author,
       coverImg,
-      bookPdf
+      bookPdf,
+      description,
+      like,
+      dislike,
+      comments
     });
 
     return res.status(200).send({
@@ -53,25 +57,23 @@ route.post('/addbook', upload.fields([
     });
   } catch (err) {
     return res.status(500).send({
-      message: 'Failed to create Book!',
+      message: 'Failed to create book!',
       error: err.message
     });
   }
 });
 
-
-// 3️⃣ Route to Fetch Books:
-route.get('/book/books', async (req, res) => {
+// ✅ GET route to fetch books
+route.get('/books', async (req, res) => {
   try {
     const books = await Book.find();
     return res.status(200).json(books);
   } catch (err) {
     return res.status(500).send({
-      message: 'Problem fetching books!',
+      message: 'Failed to fetch books!',
       error: err.message
     });
   }
 });
-
 
 module.exports = route;

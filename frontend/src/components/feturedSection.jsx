@@ -34,13 +34,19 @@ const FeturedSection = () => {
     fetch('http://localhost:9000/user')
       .then((res) => res.json())
       .then((data) => {
-        console.log('User data fetched:', data);
         setUser(data);
       })
       .catch((err) => {
         console.error('Error fetching user data:', err);
         setUser(null); // treat error as no user
       });
+
+      fetch('http://localhost:9000/book/books')
+      .then((res)=> res.json())
+      .then((data)=> setSelectedBook(data))
+      .catch((err)=> {
+        console.log('Error while fetching Books Data...', err)
+      })
   }, []);
 
   const booksData = [
@@ -50,6 +56,7 @@ const FeturedSection = () => {
       author: 'James Clear',
       coverImg: '/booksImg/atomic-habits.jpg',
       pdf: '/books/Atomic_Habits.pdf',
+      like: true,
       description: 'In Atomic Habits, James Clear emphasizes that tiny changes lead to remarkable results over time — success is simply the product of daily small improvements...'
     },
     {
@@ -107,9 +114,28 @@ const FeturedSection = () => {
     setShowAlert(false);
   };
 
-  const [color, setColor] = useState(false);
-  const ChangeColor = () => {
-    setColor(true)
+
+  const [like, setLike] = useState(true);
+  const [disLike, setDisLike] = useState(true);
+  const [favorite, setFavorite] = useState(true);
+
+  const likeFunc = () => {
+    if(like){
+      setLike(false)
+    }
+    setDisLike(true)
+  }
+  
+  const dislikeFunc = () => {
+    if(disLike){
+      setDisLike(false)
+    }
+    setLike(true)
+  }
+
+  
+  const favoriteFunc = () => {
+    setFavorite(false)
   }
   return (
     <div className="relative flex flex-col justify-center mt-[50px] gap-6 p-6 bg-[#080d13] border border-[#94A3B8] rounded-4xl">
@@ -142,7 +168,7 @@ const FeturedSection = () => {
 
       {/* Modal Section for selected book */}
       {selectedBook && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/40 backdrop-blur-lg z-50">
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-lg z-50">
           <div className="bg-[#121722] p-8 h-[90vh] w-[90%] rounded-lg max-w-4xl mx-auto relative border border-white overflow-y-auto">
             {/* Close Button */}
             <button 
@@ -153,16 +179,16 @@ const FeturedSection = () => {
             </button>
 
             {/* Content Layout */}
-            <div className="flex gap-6 h-full border border-white">
+            <div className="flex gap-6 h-full">
               {/* Book Image */}
               <img 
                 src={selectedBook.coverImg} 
                 alt={selectedBook.title} 
-                className="w-70 h-90 mt-20 object-cover rounded-md"
+                className="w-70 h-90 mt-10 object-cover rounded-md"
               />
 
               {/* Book Info (left-aligned) */}
-              <div className="flex flex-col justify-start items-start text-left w-full mt-20">
+              <div className="flex flex-col justify-start items-start text-left w-full mt-10">
                 <h2 className="text-3xl font-bold font-poppins text-[#F1F5F9] mb-2">{selectedBook.title}</h2>
                 <h4 className="text-xl text-[#94A3B8] italic mb-4">by {selectedBook.author}</h4>
                 <p className="text-[#F1F5F9] text-base mb-4">{selectedBook.description}</p>
@@ -175,9 +201,23 @@ const FeturedSection = () => {
                 >
                   Read PDF
                 </a>
-                <div>
-                  <h1 className='text-white mt-3 border border-white rounded-lg w-[50px] h-[25px] flex justify-center items-center' onClick={ChangeColor}>Like</h1>
+                <div className='flex gap-2'>
+                  <h1 className={`text-white mt-3 border border-white rounded-lg w-[70px] h-[30px] flex justify-center items-center ${!like ? 'bg-green-400' : null} cursor-pointer`} onClick={likeFunc}>Like</h1>
+                  
+                  <h1 className={`text-white mt-3 border border-white rounded-lg w-[70px] h-[30px] flex justify-center items-center ${!disLike ? 'bg-red-400' : null} cursor-pointer`} onClick={dislikeFunc}>Dislike</h1>
+
+                  <img src={`/icons/${!favorite ? 'favorite.png' : 'love.png' }`} className='h-[20px] mt-4 ml-5 cursor-pointer' alt='favorite' onClick={favoriteFunc}/>
                 </div>
+                </div>
+                <div className='border border-white  text-white w-[100%] flex flex-col gap-2 mt-3'>
+                  <label className='pl-2'>Comments</label>
+                  <div>
+                    <input type='text' placeholder='Enter Your Comments' className='w-[80%] h-[35px] pl-2 border border-white'/>
+                    <button type='submit' className='w-[100px] h-[35px] border border-white cursor-pointer'>Submit</button>
+                  </div>
+                  <div className='overflow-y-auto w-[100%] gap-2'>
+
+                  </div>
                 </div>
               </div>
             </div>
