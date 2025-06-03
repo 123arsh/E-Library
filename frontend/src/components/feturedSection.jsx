@@ -40,13 +40,6 @@ const FeturedSection = () => {
         console.error('Error fetching user data:', err);
         setUser(null); // treat error as no user
       });
-
-      fetch('http://localhost:9000/book/books')
-      .then((res)=> res.json())
-      .then((data)=> setSelectedBook(data))
-      .catch((err)=> {
-        console.log('Error while fetching Books Data...', err)
-      })
   }, []);
 
   const booksData = [
@@ -63,7 +56,7 @@ const FeturedSection = () => {
       id: 2,
       title: 'Master Your Emotions',
       author: 'Thibaut Meurisse',
-      coverImg: '/booksImg/mye.jpg',
+      coverImg: '/booksImg/master-your-emotions.jpg',
       value: 'motivational',
       pdf: '/books/Master_Your_Emotions_A_Practical_Guide_to_Overcome.pdf',
       description: 'In Master Your Emotions, Thibaut Meurisse explains how emotions influence our thoughts, actions, and overall quality of life...'

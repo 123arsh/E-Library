@@ -11,5 +11,4 @@ const Alert = ({ closeAlert }) => {
   );
 };
 
-
 export default Alert;

@@ -3,42 +3,51 @@ const { model, Schema } = require('mongoose');
 const booksData = new Schema({
   title: {
     type: String,
-    required: true,     // ✅ Corrected spelling
-    unique: true,       // ✅ Corrected spelling
+    required: true,
+    unique: true,
     index: true,
   },
   author: {
     type: String,
-    required: true,     // ✅ Corrected spelling
+    required: true,
     index: true,
   },
   coverImg: {
     type: String,
-    required: true,     // ✅ Corrected spelling
-    unique: true,       // ✅ Corrected spelling
+    required: true,
+    unique: true,
     index: true,
   },
   bookPdf: {
     type: String,
-    required: true,     // ✅ Corrected spelling
-    unique: true,       // ✅ Corrected spelling
+    required: true,
+    unique: true,
     index: true,
   },
   description: {
     type: String,
-    required: true,     // ✅ Corrected spelling
+    required: true,
     index: true,
   },
-  likes: {
+  value: {
     type: String,
-    default: 0
+  },
+  likes: {
+    type: Number,
+    default: 0,
   },
   dislike: {
-    type: String,
-    default: 0
+    type: Number,
+    default: 0,
   },
   comments: {
-    type: [String],     // ✅ Changed to an array to allow multiple comments
+    type: [
+      {
+        text: { type: String, required: true },
+        user: { type: String, default: 'Anonymous' }, // can be replaced with ObjectId if you have users
+        timestamp: { type: Date, default: Date.now }
+      }
+    ],
     default: []
   }
 }, { timestamps: true });

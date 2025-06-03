@@ -76,4 +76,42 @@ route.get('/books', async (req, res) => {
   }
 });
 
+// POST /book/like/:id
+route.post('/like/:id', async (req, res) => {
+  try {
+    const book = await Book.findById(req.params.id);
+    book.likes = Number(book.likes) + 1;
+    await book.save();
+    res.status(200).json({ success: true, likes: book.likes });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to like book' });
+  }
+});
+
+// POST /book/dislike/:id
+route.post('/dislike/:id', async (req, res) => {
+  try {
+    const book = await Book.findById(req.params.id);
+    book.dislike = Number(book.dislike) + 1;
+    await book.save();
+    res.status(200).json({ success: true, dislike: book.dislike });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to dislike book' });
+  }
+});
+
+// POST /book/comment/:id
+route.post('/comment/:id', async (req, res) => {
+  try {
+    const { text } = req.body;
+    const book = await Book.findById(req.params.id);
+    book.comments.push(text);
+    await book.save();
+    res.status(200).json({ success: true, comments: book.comments });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to post comment' });
+  }
+});
+
+
 module.exports = route;
