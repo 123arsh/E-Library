@@ -10,7 +10,7 @@ const storage = multer.diskStorage({
     if (file.mimetype.startsWith('image/')) {
       cb(null, path.resolve('./public/booksImg'));
     } else if (file.mimetype === 'application/pdf') {
-      cb(null, path.resolve('./public/books')); // 👈 Changed from booksPdf to books
+      cb(null, path.resolve('./public/books')); // 👈 Matches PDF folder
     } else {
       cb(new Error('Only image and PDF files are allowed!'));
     }
@@ -21,7 +21,7 @@ const storage = multer.diskStorage({
   }
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({ storage });
 
 // ✅ POST route to add book
 route.post('/addbook', upload.fields([
@@ -29,16 +29,14 @@ route.post('/addbook', upload.fields([
   { name: 'bookPdf', maxCount: 1 }
 ]), async (req, res) => {
   try {
-    const { title, author, description, like = 0, dislike = 0, comments = "" } = req.body;
+    const { title, author, description } = req.body;
 
     if (!title || !author || !req.files['coverImg'] || !req.files['bookPdf']) {
-      return res.status(400).send({
-        message: 'Title, Author, Cover Image, or Book PDF is missing!'
-      });
+      return res.status(400).send({ message: 'Missing fields: title, author, coverImg, or bookPdf' });
     }
 
     const coverImg = `/booksImg/${req.files['coverImg'][0].filename}`;
-    const bookPdf = `/books/${req.files['bookPdf'][0].filename}`; // 👈 Matches updated folder
+    const bookPdf = `/books/${req.files['bookPdf'][0].filename}`;
 
     const book = await Book.create({
       title,
@@ -46,9 +44,9 @@ route.post('/addbook', upload.fields([
       coverImg,
       bookPdf,
       description,
-      like,
-      dislike,
-      comments
+      likes: 0,
+      dislike: 0,
+      comments: []
     });
 
     return res.status(200).send({
@@ -63,55 +61,63 @@ route.post('/addbook', upload.fields([
   }
 });
 
-// ✅ GET route to fetch books
+// ✅ GET all books
 route.get('/books', async (req, res) => {
   try {
     const books = await Book.find();
-    return res.status(200).json(books);
+    res.status(200).json(books);
   } catch (err) {
-    return res.status(500).send({
-      message: 'Failed to fetch books!',
-      error: err.message
-    });
+    res.status(500).send({ message: 'Failed to fetch books', error: err.message });
   }
 });
 
-// POST /book/like/:id
+// ✅ LIKE a book
 route.post('/like/:id', async (req, res) => {
   try {
     const book = await Book.findById(req.params.id);
-    book.likes = Number(book.likes) + 1;
+    if (!book) return res.status(404).json({ error: 'Book not found' });
+
+    book.likes = (book.likes || 0) + 1;
     await book.save();
+
     res.status(200).json({ success: true, likes: book.likes });
   } catch (error) {
     res.status(500).json({ error: 'Failed to like book' });
   }
 });
 
-// POST /book/dislike/:id
+// ✅ DISLIKE a book
 route.post('/dislike/:id', async (req, res) => {
   try {
     const book = await Book.findById(req.params.id);
-    book.dislike = Number(book.dislike) + 1;
+    if (!book) return res.status(404).json({ error: 'Book not found' });
+
+    book.dislike = (book.dislike || 0) + 1;
     await book.save();
+
     res.status(200).json({ success: true, dislike: book.dislike });
   } catch (error) {
     res.status(500).json({ error: 'Failed to dislike book' });
   }
 });
 
-// POST /book/comment/:id
+// ✅ COMMENT on a book
 route.post('/comment/:id', async (req, res) => {
   try {
     const { text } = req.body;
+    if (!text) return res.status(400).json({ error: 'Comment text is required' });
+
     const book = await Book.findById(req.params.id);
+    if (!book) return res.status(404).json({ error: 'Book not found' });
+
+    if (!Array.isArray(book.comments)) book.comments = [];
     book.comments.push(text);
     await book.save();
+
     res.status(200).json({ success: true, comments: book.comments });
   } catch (err) {
     res.status(500).json({ error: 'Failed to post comment' });
   }
 });
-
 
 module.exports = route;
